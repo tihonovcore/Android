@@ -16,4 +16,8 @@
     <string name="div">/</string>
     <string name="_7">7</string>
     <string name="_8">8</string>
+    <string name="openBrace">(</string>
+    <string name="closeBrace">)</string>
+    <string name="ac">AC</string>
+    <string name="point">.</string>
 </resources>
