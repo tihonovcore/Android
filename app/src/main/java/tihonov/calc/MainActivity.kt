@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
     private var afterResult: Boolean = false
     private var afterOperation: Boolean = false
 
-    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -72,8 +71,9 @@ class MainActivity : AppCompatActivity() {
                     }
                     else -> {
                         if (afterOperation && (expression[expression.length - 1] == '/'
-                                           ||  expression[expression.length - 1] == '*'
-                                           ||  expression[expression.length - 1] == '.')) {
+                                        || expression[expression.length - 1] == '*'
+                                        || expression[expression.length - 1] == '.')
+                                && (map[currId] == '/' || map[currId] == '*' || map[currId] == '.')) {
                             expression = expression.substring(0, expression.length - 1)
                         }
                         print(map[currId].toString())
@@ -96,16 +96,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun print() {
-        //*,-,/ symb????
-        monitor.text = if (expression.length >= 13) {
-            expression.substring(expression.length - 12, expression.length)
+        monitor.text = if (expression.length >= 11) {
+            expression.substring(expression.length - 10, expression.length)
         } else {
             expression
         }
     }
 
     private fun print(str: String) {
-        if (expression == "0" && !str.isEmpty()) {
+        if (expression == "0" && str != ".") {
             expression = ""
         }
         expression += str
@@ -117,14 +116,40 @@ class MainActivity : AppCompatActivity() {
     private fun parse() {
         var parser: Parser = ExpressionParser()
         try {
-            var result = parser.parse(expression).evaluate()
-            expression = result.toString()
+            //remove back zeroes
+            expression = "%.10f".format(parser.parse(expression).evaluate())
+            for (curr in expression.length - 1 downTo 0) {
+                if (expression[curr] != '0') {
+                    expression = expression.substring(0, curr + 1)
+                    break
+                }
+            }
+
+            //, -> .
+            for (curr in expression.indices) {
+                if (expression[curr] == ',') {
+                    var temp = expression.substring(0, curr) + "."
+                    if (curr + 1 < expression.length) {
+                        temp += expression.substring(curr + 1, expression.length)
+                    }
+                    expression = temp
+                    break
+                }
+            }
+
+            //remove .0 or . suffix
+            expression = if (expression.endsWith(".0")) {
+                expression.substring(0, expression.length - 2)
+            } else if (expression.endsWith(".")) {
+                expression.substring(0, expression.length - 1)
+            } else {
+                expression
+            }
             print()
         } catch (e: Exception) {
             expression = "0"
             monitor.text = "ERROR"
         }
-
     }
 
     companion object {
