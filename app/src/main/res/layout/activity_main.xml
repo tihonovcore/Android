@@ -6,18 +6,21 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/monitor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="@string/_0"
-        android:textSize="64sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120sp">
+            <TextView
+                android:id="@+id/monitor"
+                android:layout_width="match_parent"
+                android:layout_height="70sp"
+                android:gravity="end"
+                android:text="@string/_0"
+                android:textSize="40sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +36,7 @@
                 android:background="#9999ff"
                 android:gravity="center"
                 android:text="@string/ac"
-                android:textSize="64sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/openBrace"
@@ -44,7 +47,7 @@
                 android:background="#9999ff"
                 android:layout_margin="3sp"
                 android:text="@string/openBrace"
-                android:textSize="64sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/closeBrace"
@@ -55,7 +58,7 @@
                 android:background="#9999ff"
                 android:layout_margin="3sp"
                 android:text="@string/closeBrace"
-                android:textSize="64sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/divide"
@@ -239,7 +242,7 @@
                 android:background="#9999ff"
                 android:gravity="center"
                 android:text="@string/del"
-                android:textSize="64sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/d0"
