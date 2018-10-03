@@ -7,6 +7,8 @@ import android.widget.TextView
 import expression.parser.ExpressionParser
 import expression.parser.Parser
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var expression = "0"
@@ -65,8 +67,8 @@ class MainActivity : AppCompatActivity() {
                         print()
                     }
                     '=' -> {
-                        parse()
                         afterResult = true
+                        parse()
                     }
                     else -> {
                         val prev = expression[expression.length - 1]
@@ -99,6 +101,10 @@ class MainActivity : AppCompatActivity() {
             22
         }
 
+        if (afterResult && expression.endsWith(".0")) {
+            expression = expression.substring(0, expression.length - 2)
+        }
+
         val len = expression.length
         monitor.text = if (len >= maxLen) {
             expression.substring(len - maxLen + 1, len)
@@ -115,34 +121,22 @@ class MainActivity : AppCompatActivity() {
         print()
     }
 
-    //?
-    private fun Double.format(fracDigits: Int): String {
-        val df = DecimalFormat()
-        df.maximumFractionDigits = fracDigits
-        return df.format(this)
+    private fun Double.format(): String {
+        val otherSymbols = DecimalFormatSymbols(Locale.US)
+        val decimalFormat = DecimalFormat("##0.00000", otherSymbols)
+        return decimalFormat.format(this)
     }
 
     private fun parse() {
         val parser: Parser = ExpressionParser()
         try {
-            expression = parser.parse(expression).evaluate().format(5)
+            expression = parser.parse(expression).evaluate().format()
         } catch (e: Exception) {
             expression = "0"
             monitor.text = "ERROR"
             return
         }
-
-        //, -> .
-        for (curr in expression.indices) {
-            if (expression[curr] == ',') {
-                var temp = expression.substring(0, curr) + "."
-                if (curr + 1 < expression.length) {
-                    temp += expression.substring(curr + 1, expression.length)
-                }
-                expression = temp
-                break
-            }
-        }
+        expression = expression.toDouble().toString()
         print()
     }
 
