@@ -85,12 +85,14 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             expression = savedInstanceState.getString(EXPR)
+            afterResult = savedInstanceState.getBoolean(AFTER_RES)
             print()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString(EXPR, expression)
+        outState.putBoolean(AFTER_RES, afterResult)
         super.onSaveInstanceState(outState)
     }
 
@@ -123,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun Double.format(): String {
         val otherSymbols = DecimalFormatSymbols(Locale.US)
-        val decimalFormat = DecimalFormat("##0.00000", otherSymbols)
+        val decimalFormat = DecimalFormat("##0.######", otherSymbols)
         return decimalFormat.format(this)
     }
 
@@ -136,11 +138,13 @@ class MainActivity : AppCompatActivity() {
             monitor.text = "ERROR"
             return
         }
-        expression = expression.toDouble().toString()
+
+
         print()
     }
 
     companion object {
         private val EXPR = MainActivity::class.java.name + ".expr"
+        private val AFTER_RES = MainActivity::class.java.name + ".after_res"
     }
 }
