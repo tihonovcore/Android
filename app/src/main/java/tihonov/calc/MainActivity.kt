@@ -71,10 +71,15 @@ class MainActivity : AppCompatActivity() {
                         parse()
                     }
                     else -> {
+                        val braceSet = setOf('(', ')')
                         val prev = expression[expression.length - 1]
-                        if (map.containsValue(prev) && prev != '(' && prev != ')'
-                                && map[currId] != '(' && map[currId] != ')') {
+                        if (map.containsValue(prev) && prev !in braceSet && map[currId] !in braceSet) {
                             expression = expression.substring(0, expression.length - 1)
+                        }
+
+                        if (afterResult && map[currId] in braceSet) {
+                            expression = ""
+                            afterResult = false
                         }
                         print(map[currId])
                         afterResult = false
@@ -103,10 +108,6 @@ class MainActivity : AppCompatActivity() {
             22
         }
 
-        if (afterResult && expression.endsWith(".0")) {
-            expression = expression.substring(0, expression.length - 2)
-        }
-
         val len = expression.length
         monitor.text = if (len >= maxLen) {
             expression.substring(len - maxLen + 1, len)
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun print(char: Char?) {
-        if (char != null && expression == "0" && char.isDigit()) {
+        if (char != null && expression == "0" && (char.isDigit() || char == '(')) {
             expression = ""
         }
         expression += char
@@ -138,8 +139,6 @@ class MainActivity : AppCompatActivity() {
             monitor.text = "ERROR"
             return
         }
-
-
         print()
     }
 
